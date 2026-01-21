@@ -19,7 +19,7 @@ void main ()
   if(P3_1==0)
   {
     Delay1ms(20);  //按下延时
-    while(1);  //等待抬起
+    while(P3_1==0);  //等待抬起
     Delay1ms(20);  //抬起延时
     P2_0=~P2_0;  //LED翻转
   }
