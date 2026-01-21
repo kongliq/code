@@ -1,0 +1,50 @@
+unsigned char KeyScan(void)
+{
+	static unsigned char key_flag = 0;  // 按键状态标志
+	
+	// 检测按键是否按下（低电平）
+	if(P3_1 == 0)
+	{
+		// 延时消抖（约10-20ms）
+		Delay1ms(20);
+		
+		// 再次检测按键状态，确认按下
+		if(P3_1 == 0 && key_flag == 0)
+		{
+			// 设置标志，表示已检测到按下
+			key_flag = 1;
+			
+			// 按下有效，立即返回1执行动作
+			return 1;
+		}
+	}
+	else
+	{
+		// 按键释放，清除标志
+		if(key_flag == 1)
+		{
+			// 释放消抖
+			Delay1ms(20);
+			key_flag = 0;
+		}
+	}
+	
+	return 0;
+}
+
+void main()
+{
+	// 初始化LED端口（P2.0）
+	//P2_0 = 0;
+	
+	// 初始化按键端口（P3.1上拉输入）
+	while(1)
+	{
+		// 检测按键是否按下有效
+		if(KeyScan())
+		{
+			// 按键按下有效，执行开关动作（LED翻转）
+			P2_0 = ~P2_0;
+		}
+	}
+}
