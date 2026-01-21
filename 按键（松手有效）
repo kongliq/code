@@ -1,0 +1,27 @@
+void Delay1ms(unsigned int ms)	  //基于80C52的1ms延时函数
+{
+	unsigned char data i, j;
+	while(ms--)
+	{
+		_nop_();
+		i = 2;
+		j = 199;
+		do
+		{
+			while (--j);
+		} while (--i);
+	}
+}
+
+
+void main ()
+{
+  if(P3_1==0)
+  {
+    Delay1ms(20);  //按下延时
+    while(1);  //等待抬起
+    Delay1ms(20);  //抬起延时
+    P2_0=~P2_0;  //LED翻转
+  }
+
+}
