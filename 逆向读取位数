@@ -1,0 +1,18 @@
+unsigned char ReverseBits(unsigned char num)
+{
+	unsigned char result = 0;  //传输结果
+	unsigned char i;  //次数，多少位
+	
+	// 循环8次，逐位反转
+	for(i = 0; i < 8; i++)
+	{
+		// 将原数据的第i位移动到结果的第(7-i)位
+		result = (result << 1) | (num & 0x01);
+		num = num >> 1;
+	}
+	
+	return result;
+}
+/*
+优点   代码实现简单，便于理解
+缺点   效率低，倘若位数不高可以直接采取读表
