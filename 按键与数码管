@@ -1,0 +1,96 @@
+#include <REGX52.H>
+#include <INTRINS.H>
+
+unsigned char SHUMAGUAN[]={0X3F,0X06,0X5B,0X4F,0X66,0X6D,0X7D,0X07,0X7F,0X6F};
+unsigned char shu[8]=0;
+void Add();
+void Sub();
+void Delay(unsigned int ms)	
+{
+	unsigned char data i, j;
+	
+	while(ms--)
+	{
+		_nop_();
+		i = 2;
+		j = 199;
+		do
+		{
+			while (--j);
+		} while (--i);
+	}
+}
+
+void a(unsigned char where,unsigned char number)
+{
+	switch(where)
+	{
+		case 0:P2_2=0;P2_3=0;P2_4=0;break;
+		case 1:P2_2=1;P2_3=0;P2_4=0;break;	
+		case 2:P2_2=0;P2_3=1;P2_4=0;break;	
+		case 3:P2_2=1;P2_3=1;P2_4=0;break;	
+		case 4:P2_2=0;P2_3=0;P2_4=1;break;	
+		case 5:P2_2=1;P2_3=0;P2_4=1;break;
+		case 6:P2_2=0;P2_3=1;P2_4=1;break;
+		case 7:P2_2=1;P2_3=1;P2_4=1;break;
+	}
+	P0=SHUMAGUAN[number];	
+	Delay(1);
+}
+void b()
+{
+	int i;
+	for(i=0;i<8;i++)
+	{
+		a(i,shu[i]);
+	}
+}
+
+void main()
+{
+	while(1)
+	{
+		b();
+		if(P3_1==0)
+		{
+			Delay(1);  
+			while(P3_1==0)b();  
+			//Delay(1);  
+			b();
+			Add();
+		}
+		if(P3_0==0)
+		{
+			Delay(1);  
+			while(P3_0==0)b();  
+			//Delay(1);  
+			b();
+			Sub();
+		}
+	}
+}
+void Add()
+{
+		shu[0]++;
+		if(shu[0] == 10) { shu[0] = 0; shu[1]++; }
+		if(shu[1] == 10) { shu[1] = 0; shu[2]++; }
+		if(shu[2] == 10) { shu[2] = 0; shu[3]++; }
+		if(shu[3] == 10) { shu[3] = 0; shu[4]++; }
+		if(shu[4] == 10) { shu[4] = 0; shu[5]++; }
+    if(shu[5] == 10) { shu[5] = 0; shu[6]++; }
+    if(shu[6] == 10) { shu[6] = 0; shu[7]++; }
+    if(shu[7] == 10) { shu[7] = 0; }		
+}
+void Sub()
+{
+    shu[0]--;
+    if(shu[0] == 255) { shu[0] = 9; shu[1]--; }
+    if(shu[1] == 255) { shu[1] = 9; shu[2]--; }
+    if(shu[2] == 255) { shu[2] = 9; shu[3]--; }
+		if(shu[3] == 255) { shu[3] = 9; shu[4]--; }
+    if(shu[4] == 255) { shu[4] = 9; shu[5]--; }
+    if(shu[5] == 255) { shu[5] = 9; shu[6]--; }
+		if(shu[6] == 255) { shu[6] = 9; shu[7]--; }
+    if(shu[7] == 255) { shu[7] = 9; } 
+}
+
