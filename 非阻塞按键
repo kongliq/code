@@ -1,0 +1,26 @@
+unsigned char KeyDown_P31(void)
+{
+    static unsigned char cnt = 0;
+    static unsigned char locked = 0;
+
+    if(P3_1 == 0)                 // 检测到按下(低电平)
+    {
+        if(!locked)
+        {
+            if(cnt < 5) cnt++;    // 连续5次都按下 -> 认为稳定
+            else
+            {
+                cnt = 0;
+                locked = 1;       // 锁定，等松手
+                return 1;         // 只触发一次：按下事件
+            }
+        }
+    }
+    else                           // 松手(高电平)
+    {
+        cnt = 0;
+        locked = 0;               // 解锁，允许下次按下触发
+    }
+
+    return 0;
+}
